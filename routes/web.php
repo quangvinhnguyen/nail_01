@@ -25,4 +25,4 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/service', 'ProductController@index')->name('index');
+Route::get('/service', 'User\ProductController@index')->name('index');
