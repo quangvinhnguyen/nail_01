@@ -150,4 +150,9 @@ abstract class BaseRepository implements BaseRepositoryInterface
 
         return $this->whereIn('id', $ids)->update($field, $value);
     }
+
+    public function getModel()
+    {
+        return $this->model;
+    }
 }
