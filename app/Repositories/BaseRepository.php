@@ -135,7 +135,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
         $model = $this->model->findOrFail($id);
 
         if ($model) {
-            $model->fill($input);
+            $model->fill($value);
             $model->save();
 
             return $this;
@@ -149,5 +149,10 @@ abstract class BaseRepository implements BaseRepositoryInterface
         $ids = is_array($ids) ? $ids : [$ids];
 
         return $this->whereIn('id', $ids)->update($field, $value);
+    }
+
+    public function getModel()
+    {
+        return $this->model;
     }
 }
