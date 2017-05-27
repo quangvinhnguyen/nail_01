@@ -1,0 +1,24 @@
+{
+  "name": "nail",
+  "description": "nguyenquangvinh",
+  "main": "bower.json",
+  "authors": [
+    "NguyenQuangVinh vinh.nguyenquang@tranaga.vn"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "bower"
+  ],
+  "homepage": "https://github.com/quangvinhnguyen/nail",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}
