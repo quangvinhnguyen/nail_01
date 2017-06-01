@@ -38,7 +38,6 @@ abstract class AbstractController extends Controller
     public function repositorySetup($repository = null)
     {
         $this->repository = $repository;
-
         $this->repositoryName = strtolower(class_basename($this->repository->getModel()));
     }
 

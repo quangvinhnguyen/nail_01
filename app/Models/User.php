@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, AuthenticatesUsers;
 
     /**
      * The attributes that are mass assignable.
@@ -15,7 +16,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'id',
+        'name',
+        'email',
+        'password',
+        'level',
+        'token_confirm',
     ];
 
     /**
@@ -26,4 +32,23 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function setPasswordAttribute($value)
+    {
+        return $this->attributes['password'] = bcrypt($value);
+    }
+
+    public function setTokenConfirmAttribute($value)
+    {
+        if (!is_null($value)) {
+            return $this->attributes['token_confirm'] = md5(uniqid($value, true));
+        }
+
+        return $this->attributes['token_confirm'] = null;
+    }
+
+    public function isAdmin()
+    {
+        return $this->attributes['level'] == 1; // 0 is user 1 is admin => config later
+    }
 }

@@ -4,12 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
-use App\Repositories\Service\ServiceRepository;
-use App\Repositories\Service\ServiceRepositoryInterface;
 use App;
-
-use App\Repositories\Product\ProductRepository;
-use App\Repositories\Product\ProductRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,6 +13,22 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
+
+     private static $repositories = [
+        'product' => [
+            'App\Repositories\Product\ProductRepository',
+            'App\Repositories\Product\ProductRepositoryInterface',
+        ],
+        'service' => [
+            'App\Repositories\Service\ServiceRepository',
+            'App\Repositories\Service\ServiceRepositoryInterface',
+        ],
+        'user' => [
+            'App\Repositories\User\UserRepository',
+            'App\Repositories\User\UserRepositoryInterface',
+        ],
+     ];
+
     public function boot()
     {
         Schema::defaultStringLength(191);
@@ -30,7 +41,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        App::bind(ServiceRepositoryInterface::class, ServiceRepository::class);
-        App::bind(ProductRepositoryInterface::class, ProductRepository::class);
+        foreach (static::$repositories as $repositorie)
+        {
+            App::bind($repositorie[1], $repositorie[0]);
+        }
     }
 }
