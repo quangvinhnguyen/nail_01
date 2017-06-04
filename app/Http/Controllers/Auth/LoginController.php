@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Auth;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -35,5 +37,24 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function login(Request $request)
+    {
+        $data = $request->only([
+            'email',
+            'password',
+        ]);
+        
+        if (Auth::attempt([
+            'email' => $data['email'], 
+            'password' => $data['password'],
+            'token_confirm' => null,
+        ])) {
+            return redirect()->intended(action(auth()->user()->level == 1 ? 'Admin\BaseController@index' : 'User\ProductController@index'));
+        }
+
+        dd('function in process building...');
+        // return redirect()->action('User\ProductController@index');
     }
 }

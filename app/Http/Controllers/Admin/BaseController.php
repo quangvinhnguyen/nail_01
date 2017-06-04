@@ -8,8 +8,14 @@ class BaseController extends AbstractController
 {
     protected $viewPrefix = 'admin';
 
+    /*
+    * function index of admin pages
+    */
     public function index()
     {
-        dd('ts day');
+        // exemple 
+        echo('admin page');
+        die();
+        # code 
     }
 }

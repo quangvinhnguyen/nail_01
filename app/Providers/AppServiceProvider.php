@@ -23,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
             'App\Repositories\Service\ServiceRepository',
             'App\Repositories\Service\ServiceRepositoryInterface',
         ],
+        'user' => [
+            'App\Repositories\User\UserRepository',
+            'App\Repositories\User\UserRepositoryInterface',
+        ],
      ];
 
     public function boot()
