@@ -42,10 +42,25 @@ Route::group(['prefix' => '/admin', 'middleware' => 'admin', 'namespace' => 'Adm
             'update', 
         ],
     ]);
+
+    Route::resource('/products', 'ProductsController',[
+        'only' => [
+            'destroy',
+            'store',
+            'create',
+            'index',
+            'edit',
+            'update',
+        ],
+    ]);
+    
 });
 
 Route::group(['prefix' => '/', 'namespace' => 'User'], function () {
-    Route::get('/', 'BaseController@index');
+    // Route::get('/', 'BaseController@index');
+    Route::get('/', function () {
+        return view('auth.login');
+    });
 
     Route::get('/service', 'ProductController@index')->name('index');
 

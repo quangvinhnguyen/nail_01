@@ -50,8 +50,9 @@ abstract class AbstractController extends Controller
     public function viewRender($view = null, $compact = null) // hàm tạo view rồi truyền compacts phía trên + cái m muốn modifile lại theo như m thích. có cũng đc k có cũng k sao
     {
         $this->view = $view;
-
+        
         if (func_num_args() == 1 && is_string($view)) {
+            dd(view($this->viewPrefix . '.' . $this->view, $this->compacts)->render());
             return view($this->viewPrefix . '.' . $this->view, $this->compacts);
         } elseif (!is_string($view)) {
             throw new Exception('Invalit path to view');

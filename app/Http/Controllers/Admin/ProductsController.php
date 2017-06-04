@@ -3,23 +3,23 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use App\Repositories\Service\ServiceRepositoryInterface;
+use App\Repositories\Product\ProductRepositoryInterface;
 
-class ServicesController extends BaseController
+class ProductsController extends BaseController
 {
-    public function __construct(ServiceRepositoryInterface $ServiceRepository)
+     public function __construct(ProductRepositoryInterface $ProductRepository)
     {
-    	parent::__construct($ServiceRepository);
+    	parent::__construct($ProductRepository);
     }
 
-    public function index()
+      public function index()
     {
-    	return $this->viewRender('services.index', $this->repository->all());
+    	return $this->viewRender('Product.index', $this->repository->all());
     }
 
     public function create()
     {
-        return view('admin.services.createService');
+        return view('admin.Product.create');
     }
 
     public function store(Request $request)
@@ -31,14 +31,14 @@ class ServicesController extends BaseController
 
         $service = $this->repository->create($data);
 
-        return redirect()->action('Admin\ServicesController@index');
+        return redirect()->action('Admin\ProductController@index');
     }
     
     public function edit($id)
     {
         $this->compacts['src'] = $this->repository->find($id); 
 
-        return $this->viewRender('services.update');
+        return $this->viewRender('Product.update');
     }
     
     public function update($id,Request $request)
@@ -49,13 +49,13 @@ class ServicesController extends BaseController
        ]);
        $service = $this->repository->update($id,$data);
 
-       return redirect()->action('Admin\ServicesController@index');
+       return redirect()->action('Admin\ProductController@index');
     }
 
     public function destroy($id)
     {
         $service = $this->repository->delete($id);
 
-        return redirect()->action('Admin\ServicesController@index');
+        return redirect()->action('Admin\ProductController@index');
     }
 }
