@@ -1,17 +1,14 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use View;
+
 use Illuminate\Http\Request;
 use App\Repositories\Service\ServiceRepositoryInterface;
 
 class ServicesController extends BaseController
 {
-
-
-    public function __construct(
-        ServiceRepositoryInterface $ServiceRepository
-    ) {
+    public function __construct(ServiceRepositoryInterface $ServiceRepository)
+    {
     	parent::__construct($ServiceRepository);
     }
 
@@ -39,9 +36,9 @@ class ServicesController extends BaseController
     
     public function edit($id)
     {
-        $service = $this->repository->find($id);
-        
-        return View::make('admin.services.update')->with('src',$service);
+        $this->compacts['src'] = $this->repository->find($id); 
+
+        return $this->viewRender('services.update');
     }
     
     public function update($id,Request $request)

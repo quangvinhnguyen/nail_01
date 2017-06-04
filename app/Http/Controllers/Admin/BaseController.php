@@ -7,9 +7,11 @@ use App\Http\Controllers\AbstractController;
 class BaseController extends AbstractController
 {
     protected $viewPrefix = 'admin';
-
+    /*
+    * function index of admin pages
+    */
     public function index()
     {
-        dd('ts day');
+        return view('admin.index'); // nên sử dụng function viewRender :v 
     }
 }

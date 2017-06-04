@@ -45,7 +45,7 @@
     <!-- Custom Theme Style -->
     {{-- <link href="../build/css/custom.min.css" rel="stylesheet"> --}}
       {!! Html::style('admin/css/custom.min.css') !!}
- 
+
   </head>
 
   <body class="nav-md">
@@ -66,7 +66,7 @@
         <!-- /footer content -->
       </div>
     </div>
-      <!-- jQuery -->
+
     {{-- <script src="../vendors/jquery/dist/jquery.min.js"></script> --}}
      {!! Html::script('admin/vendors/jquery/dist/jquery.min.js') !!}
     <!-- Bootstrap -->
@@ -163,7 +163,5 @@
     <!-- Custom Theme Scripts -->
     {{-- <script src="../build/js/custom.min.js"></script> --}}
     {!! Html::script('admin/js/custom.min.js') !!}
-	
-   
   </body>
 </html>

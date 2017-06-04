@@ -31,16 +31,25 @@
       <div class="login_wrapper">
         <div class="animate form login_form">
           <section class="login_content">
-            <form>
+            {{ Form::open(['action' => 'Auth\LoginController@login']) }}
               <h1>Login Form</h1>
               <div>
-                <input type="text" class="form-control" placeholder="Username" required="" />
+                {{ Form::email('email', '', [
+                  'class' => 'form-control', 
+                  'required' => true, 
+                  'placeholder' => 'Email',
+                ]) }}
               </div>
               <div>
-                <input type="password" class="form-control" placeholder="Password" required="" />
+                {{ Form::password('password', '', [
+                  'class' => 'form-control', 
+                  'required' => true,
+                  'placeholder' => 'Password', 
+                  
+                ]) }}
               </div>
               <div>
-                <a class="btn btn-default submit" href="index">Log in</a>
+                {{ Form::submit('Log in', ['class' => 'btn btn-default submit']) }}
                 <a class="reset_pass" href="#">Lost your password?</a>
               </div>
 
@@ -59,25 +68,42 @@
                  
                 </div>
               </div>
-            </form>
+            {{ Form::close() }}
           </section>
         </div>
 
         <div id="register" class="animate form registration_form">
           <section class="login_content">
-            <form>
+            {{ Form::open(['action' => 'Auth\RegisterController@register']) }}
               <h1>Create Account</h1>
               <div>
-                <input type="text" class="form-control" placeholder="Username" required="" />
+                {{ Form::text('name', '', ['class' => 'form-control', 'placeholder' => 'Username', 'required' => true]) }}
               </div>
               <div>
-                <input type="email" class="form-control" placeholder="Email" required="" />
+                {{ Form::email('email', '', [
+                  'class' => 'form-control', 
+                  'required' => true, 
+                  'placeholder' => 'Email',
+                  'id' => 'email',
+                ]) }}
               </div>
               <div>
-                <input type="password" class="form-control" placeholder="Password" required="" />
+                {{ Form::password('password', '', [
+                  'class' => 'form-control', 
+                  'placeholder' => 'Password', 
+                  'required' => true,
+                  'id' => 'password',
+                ]) }}
               </div>
               <div>
-                <a class="btn btn-default submit" href="index.html">Submit</a>
+                {{ Form::password('password_confirmation', '', [
+                  'class' => 'form-control',
+                  'id' => 'password-confirm',
+                  'required' => true,
+                ]) }}
+              </div>
+              <div>
+                {{ Form::submit('Submit', ['class' => 'btn btn-default submit']) }}
               </div>
 
               <div class="clearfix"></div>
@@ -95,7 +121,7 @@
                  
                 </div>
               </div>
-            </form>
+            {{ Form::close() }}
           </section>
         </div>
       </div>

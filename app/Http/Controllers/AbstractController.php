@@ -10,11 +10,12 @@ use View;
 
 abstract class AbstractController extends Controller
 {
+    
     protected $repository;
 
     protected $repositoryName;
 
-    protected $compacts = [];
+    protected $compacts = []; // biến m muốn truyền qa bên đó bất kể thử gì
 
     protected $view;
 
@@ -38,7 +39,6 @@ abstract class AbstractController extends Controller
     public function repositorySetup($repository = null)
     {
         $this->repository = $repository;
-
         $this->repositoryName = strtolower(class_basename($this->repository->getModel()));
     }
 
@@ -47,12 +47,12 @@ abstract class AbstractController extends Controller
         return property_exists($this, 'guard') ? $this->guard : null;
     }
 
-    public function viewRender($view = null, $compact = null)
+    public function viewRender($view = null, $compact = null) // hàm tạo view rồi truyền compacts phía trên + cái m muốn modifile lại theo như m thích. có cũng đc k có cũng k sao
     {
         $this->view = $view;
 
         if (func_num_args() == 1 && is_string($view)) {
-            return View::make($this->viewPrefix . '.' . $this->view);
+            return view($this->viewPrefix . '.' . $this->view, $this->compacts);
         } elseif (!is_string($view)) {
             throw new Exception('Invalit path to view');
         }

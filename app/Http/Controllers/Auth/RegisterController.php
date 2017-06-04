@@ -66,6 +66,8 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => $data['password'],
+            'level' => 1, // update later
+            'token_confirm' => null, // update later
         ]);
     }
 }

@@ -15,7 +15,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'id',
+        'name',
+        'email',
+        'password',
+        'level',
+        'token_confirm',
     ];
 
     /**
@@ -30,5 +35,19 @@ class User extends Authenticatable
     public function setPasswordAttribute($value)
     {
         return $this->attributes['password'] = bcrypt($value);
+    }
+
+    public function setTokenConfirmAttribute($value)
+    {
+        if (!is_null($value)) {
+            return $this->attributes['token_confirm'] = md5(uniqid($value, true));
+        }
+
+        return $this->attributes['token_confirm'] = null;
+    }
+
+    public function isAdmin()
+    {
+        return $this->attributes['level'] == 1; // 0 is user 1 is admin => config later
     }
 }

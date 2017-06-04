@@ -19,39 +19,37 @@ Route::get('/contact', function() {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/login',function(){
-    return view('admin.login');
-});
-  Route::get('/admin/dashboard',function(){
-        return view('admin.index');
-    });
-    // Route::get('/admin/services','Admin\ServicesController@index');
+Route::group(['namespace' => 'Auth'], function () {
+    Route::get('/login', 'LoginController@getLogin');
+
+    Route::post('/login', 'LoginController@login');
     
-    Route::group(['prefix' => '/admin', 'namespace' => 'Admin'], function() {
-         Route::resource('/services', 'ServicesController', [
-             'only' => [
-                 'destroy',
-                 'store',
-                 'create',
-                 'index',
-                 'edit',
-                 'update',
-                 
-             ]
-         ]);
-         
-    });
-Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function (){
-    Route::get('/index', 'Admin\BaseController@index');
-    // Route::get('/dashboard',function(){
-    //     return view('admin.index');
-    // });
-    // Route::get('/services','Admin\ServicesController@index');
+    Route::post('/register', 'RegisterController@register');
 });
 
-Route::group(['prefix' => '/'], function () {
-    Route::get('/', 'User\BaseController@index');
+Route::get('/home', 'HomeController@index')->name('home');
 
-    Route::get('/service', 'User\ProductController@index')->name('index');
+Route::group(['prefix' => '/admin', 'middleware' => 'admin', 'namespace' => 'Admin'], function (){
+    Route::get('/dashboard', 'BaseController@index');
+
+    Route::resource('/services', 'ServicesController', [
+        'only' => [
+            'destroy',
+            'store',
+            'create',
+            'index',
+            'edit',
+            'update', 
+        ],
+    ]);
+});
+
+Route::group(['prefix' => '/', 'namespace' => 'User'], function () {
+    Route::get('/', 'BaseController@index');
+
+    Route::get('/service', 'ProductController@index')->name('index');
+
+    Route::get('/active/{email}/{token}', 'UserController@active');
+
+    Route::get('/index', 'UserController@index');
 });

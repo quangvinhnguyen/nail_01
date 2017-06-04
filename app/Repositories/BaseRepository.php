@@ -71,28 +71,22 @@ abstract class BaseRepository implements BaseRepositoryInterface
         }
 
         $this->where[] = [$conditions, $operator, $value];
+        $this->model = $this->model->where($this->where);
 
         return $this;
     }
 
-    public function whereIn($conditions, $operator = null, $value = null)
+    public function whereIn($conditions, $value = null)
     {
-        if (func_num_args() == 2) {
-            list($value, $operator) = [$operator, '='];
-        }
-
-        $this->newQuery()->whereIn[] = [$conditions, $operator, $value];
+        $this->model = $this->model->whereIn($conditions, $value);
 
         return $this;
     }
 
-    public function orWhereIn($conditions, $operator = null, $value = null)
+    public function orWhereIn($conditions, $value = null)
     {
-        if (func_num_args() == 2) {
-            list($value, $operator) = [$operator, '='];
-        }
-
-        $this->newQuery()->orWhereIn[] = [$conditions, $operator, $value];
+        $this->orWhereIn[] = [$conditions, $operator, $value];
+        $this->model = $this->model->orWhereIn($conditions, $value);
 
         return $this;
     }
@@ -104,6 +98,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
         }
 
         $this->orWhere[] = [$conditions, $operator, $value];
+        $this->model = $this->model->orWhere($this->orWhere);
 
         return $this;
     }
@@ -138,7 +133,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
             $model->fill($value);
             $model->save();
 
-            return $this;
+            return $model;
         } else {
             throw new Exception(trans('messages.not_found_object'));
         }
@@ -153,6 +148,11 @@ abstract class BaseRepository implements BaseRepositoryInterface
 
     public function getModel()
     {
-        return $this->model;
+        return $this->makeModel();;
+    }
+
+    public function get()
+    {
+        return $this->model->get();
     }
 }
