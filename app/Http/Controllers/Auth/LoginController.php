@@ -39,6 +39,11 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    public function getLogin()
+    {
+        return view('admin.login');
+    }
+
     public function login(Request $request)
     {
         $data = $request->only([
@@ -54,7 +59,13 @@ class LoginController extends Controller
             return redirect()->intended(action(auth()->user()->level == 1 ? 'Admin\BaseController@index' : 'User\ProductController@index'));
         }
 
-        dd('function in process building...');
-        // return redirect()->action('User\ProductController@index');
+        return redirect()->action('Auth\LoginController@getLogin')->with(['message-fail' => 'Email or password not match.']);
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+
+        return redirect()->action('Auth\LoginController@getLogin');
     }
 }

@@ -3,10 +3,17 @@
 namespace App\Http\Controllers\User;
 
 use App\Repositories\User\UserRepositoryInterface;
+// use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Auth;
+use Illuminate\Http\Request;
+use Exception;
+use Log;
+
 
 class UserController extends BaseController
 {
+    // use AuthenticatesUsers;
+
     public function __construct(UserRepositoryInterface $userRepository)
     {
         parent::__construct($userRepository);
@@ -17,29 +24,30 @@ class UserController extends BaseController
         dd('ts day');
     }
 
-    public function active($email, $token_confirm)
+    public function active(Request $request, $email, $token_confirm)
     {
-        if (func_num_args() != 2) {
-            return redirect()->action('User\ProductController@index');
+        \DB::beginTransaction();
+        try {
+            $input = $this->repository->active($email, $token_confirm);
+
+            if (!$input) {
+                throw new Exception('Can not active account');
+            }
+            dd($input, Auth::attempt(['email' => $input['email'], 'password' => decrypt($input['password']), 'token_confirm' => null]));
+            dd(Auth::attempt(['email' => $input['email'], 'token_confirm' => null]));
+            if (Auth::attempt(['email' => $input['email'], 'token_confirm' => null])) {
+                \DB::commit();
+
+                return redirect()->intended(action($input['level'] == 1 ? 'Admin\BaseController@index' : 'User\ProductController@index'));
+            } else {
+                throw new Exception('Can not login after active account');
+            }
+        } catch(Exception $e) {
+            \DB::rollback();
+            dd($e);
+            Log::error($e);
         }
 
-        $user = $this->repository
-            ->where('email', $email)
-            // ->where('token_confirm', '<>', null)
-            ->get();
-
-        if (!$user || empty($user)) {
-            return false;
-        }
-
-        $this->repository->singleUpdate($user->first()->id, ['token_confirm' => null]);
-        $input = [
-            'email' => $user->first()->email,
-            'password' => $user->first()->password,
-        ];
-        
-        Auth::login($input);
-
-        return redirect()->intended(action($user->level == 1 ? 'Admin\BaseController@index' : 'User\ProductController@index'));
+        return redirect()->action('User\ProductController@index');
     }
 }

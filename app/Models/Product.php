@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+    const STATUS_BLOCK = 0;
+    const STATUS_ACTIVE = 1;
+    const STATUS_ISSALE = 2;
+    const STATUS_ISNEW = 3;
+    
     protected $fillable = [
         'id',
         'name',

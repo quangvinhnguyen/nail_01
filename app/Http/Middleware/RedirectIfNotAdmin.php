@@ -17,10 +17,10 @@ class RedirectIfNotAdmin
     public function handle($request, Closure $next)
     {
         
-        if (!Auth::guard('web')->check()) {
-            return redirect()->action('User\BaseController@index');
+        if (Auth::guard('web')->check() && Auth::guard('web')->user()->level == 1) {
+            return $next($request);
         }
 
-        return $next($request);
+        return redirect()->action('Auth\LoginController@getLogin');
     }
 }

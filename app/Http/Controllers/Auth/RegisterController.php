@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Repositories\User\UserRepositoryInterface;
+use App\Http\Controllers\Admin\BaseController;
+use Illuminate\Http\Request;
+use Exception;
 
-class RegisterController extends Controller
+
+class RegisterController extends BaseController
 {
     /*
     |--------------------------------------------------------------------------
@@ -34,9 +37,10 @@ class RegisterController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->middleware('guest');
+        parent::__construct($userRepository);
     }
 
     /**
@@ -60,12 +64,30 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return User
      */
-    protected function create(array $data)
+    public function register(Request $request)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => $data['password'],
+        $data = $request->only([
+            'name',
+            'email',
+            'password',
         ]);
+        
+        $validateServe = $this->validator($request->all());
+
+        if ($validateServe->fails()) {
+            throw new Exception();
+        }
+
+        try {
+            $this->repository->create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => $data['password'],
+            ]);
+            
+            return redirect()->action('User\UserController@index')->with('message', 'Please check your email again.');
+        } catch (Exception $e) {
+            return redirect()->action('User\UserController@index')->with('message-fail', 'Please check your email again.');
+        }
     }
 }

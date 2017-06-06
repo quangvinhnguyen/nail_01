@@ -19,22 +19,66 @@ Route::get('/contact', function() {
 
 Auth::routes();
 
-Route::post('/register', 'Auth\RegisterController@register');
+Route::group(['namespace' => 'Auth'], function () {
+    Route::get('/login', 'LoginController@getLogin');
 
-Route::post('/login', 'Auth\LoginController@login');
+    Route::post('/login', 'LoginController@login');
+
+    Route::get('/logout', 'LoginController@logout');
+    
+    Route::post('/register', 'RegisterController@register');
+});
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
-    Route::get('/index', 'Admin\BaseController@index');
+Route::group(['prefix' => '/admin', 'middleware' => 'admin', 'namespace' => 'Admin'], function (){
+    Route::get('/', 'BaseController@index');
+
+    Route::get('/dashboard', 'BaseController@index');
+
+    Route::resource('/services', 'ServicesController', [
+        'only' => [
+            'destroy',
+            'store',
+            'create',
+            'index',
+            'edit',
+            'update', 
+        ],
+    ]);
+
+    Route::resource('/products', 'ProductsController',[
+        'only' => [
+            'destroy',
+            'store',
+            'create',
+            'index',
+            'edit',
+            'update',
+        ],
+    ]);
+    
 });
 
-Route::group(['prefix' => '/'], function () {
-    Route::get('/', 'User\BaseController@index');
+Route::group(['prefix' => '/', 'namespace' => 'User'], function () {
+    Route::get('/', 'BaseController@index');
+    
+    Route::get('/service', 'ProductController@index')->name('index');
 
-    Route::get('/service', 'User\ProductController@index')->name('index');
+    Route::get('/active/{email}/{token}', 'UserController@active');
 
-    Route::get('/active/{email}/{token}', 'User\UserController@active');
+    Route::get('/index', 'UserController@index');
+});
+  
+Route::group(['prefix' => '/upload', 'namespace' => 'upload'], function () {
+    
+        Route::get('/demo', 'UploadController@demo'); 
+     Route::post('/store', 'UploadController@store');
+     Route::delete('/delete','UploadController@delete');
+});
 
-    Route::get('/index', 'User\UserController@index');
+
+
+Route::get('/demo', function () {
+    return view('demo');
 });

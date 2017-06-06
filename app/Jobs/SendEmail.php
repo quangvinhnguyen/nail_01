@@ -35,10 +35,10 @@ class SendEmail extends AbstractJob
      */
     public function handle()
     {
-        dd($this->info, $this->path, $this->fields); // for example and watting config email
+        dd($this);
         $emails = is_array($this->info['emails']) ? $this->info['emails'] : [$this->info['emails']];
         $subject = $this->info['subject'];
-         Mail::send($this->path, $this->fields, function ($message) use ($emails, $subject) {
+        Mail::send($this->path, $this->fields, function ($message) use ($emails, $subject) {
             $message->from(config('mail.from.address'));
             $message->to($emails)->subject($subject);
         });

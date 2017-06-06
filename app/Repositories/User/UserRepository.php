@@ -48,4 +48,30 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
         return true;
     }
+
+    public function active($email, $token_confirm)
+    {
+        if (func_num_args() != 2) {
+            return redirect()->action('User\ProductController@index');
+        }
+        
+        $user = $this->where([
+                'email' => $email,
+                'token_confirm' => $token_confirm,
+            ])
+            ->where('token_confirm', '<>', null)
+            ->get();
+
+        if (!$user || empty($user)) {
+            return false;
+        }
+        
+        $this->singleUpdate($user->first()->id, ['token_confirm' => null]);
+
+        return [
+            'email' => $user->first()->email,
+            'password' => $user->first()->password,
+            'level' => $user->first()->level,
+        ];
+    }
 }

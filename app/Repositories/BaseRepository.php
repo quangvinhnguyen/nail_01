@@ -56,12 +56,18 @@ abstract class BaseRepository implements BaseRepositoryInterface
     {
         $limit = is_null($limit) ? config('settings.paginate_limit') : $limit;
 
-        return $this->model->paginate($limit, $columns);
+        $paginate = $this->model->paginate($limit, $columns);
+        $this->makeModel();
+
+        return $paginate;
     }
 
     public function lists($column, $key = null)
     {
-        return $this->model->pluck($column, $key);
+        $lists = $this->model->pluck($column, $key);
+        $this->makeModel();
+
+        return $lists;
     }
 
     public function where($conditions, $operator = null, $value = null)
@@ -85,8 +91,8 @@ abstract class BaseRepository implements BaseRepositoryInterface
 
     public function orWhereIn($conditions, $value = null)
     {
-        $this->orWhereIn[] = [$conditions, $operator, $value];
-        $this->model = $this->model->orWhereIn($conditions, $value);
+        $this->orWhereIn[] = [$conditions, $value];
+        $this->model = $this->model->orWhereIn($this->orWhereIn);
 
         return $this;
     }
@@ -148,11 +154,14 @@ abstract class BaseRepository implements BaseRepositoryInterface
 
     public function getModel()
     {
-        return $this->makeModel();;
+        return $this->makeModel();
     }
 
     public function get()
     {
-        return $this->model->get();
+        $model = $this->model->get();
+        $this->makeModel();
+
+        return $model;
     }
 }
