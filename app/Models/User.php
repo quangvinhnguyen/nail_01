@@ -4,11 +4,10 @@ namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class User extends Authenticatable
 {
-    use Notifiable, AuthenticatesUsers;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -22,6 +21,7 @@ class User extends Authenticatable
         'password',
         'level',
         'token_confirm',
+        'pass_confirm',
     ];
 
     /**
@@ -35,6 +35,8 @@ class User extends Authenticatable
 
     public function setPasswordAttribute($value)
     {
+        $this->attributes['pass_confirm'] = $value;
+
         return $this->attributes['password'] = bcrypt($value);
     }
 
@@ -49,6 +51,6 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return $this->attributes['level'] == 1; // 0 is user 1 is admin => config later
+        return $this->attributes['level'] == config('users.level.admin'); // 0 is user 1 is admin => config later
     }
 }

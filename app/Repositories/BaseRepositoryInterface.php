@@ -26,7 +26,7 @@ interface BaseRepositoryInterface
 
     public function orWhere($conditions, $operator = null, $value = null);
 
-    public function create($inputs = []);
+    public function create($inputs);
 
     public function firstOrCreate($value);
 
@@ -40,5 +40,7 @@ interface BaseRepositoryInterface
 
     public function getModel();
 
-    public function get();
+    public function get($column = ['*']);
+
+    public function uploadImage($files, $path);
 }

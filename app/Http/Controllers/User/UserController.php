@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\User;
 
 use App\Repositories\User\UserRepositoryInterface;
+use Illuminate\Http\Request;
 use Auth;
+use DB;
+use Log;
 
 class UserController extends BaseController
 {
@@ -17,29 +20,30 @@ class UserController extends BaseController
         dd('ts day');
     }
 
-    public function active($email, $token_confirm)
+    public function active(Request $request, $email, $token_confirm)
     {
-        if (func_num_args() != 2) {
+        DB::beginTransaction();
+        try {
+            $input = $this->repository->active($email, $token_confirm);
+
+            if (!$input) {
+                throw new Exception('Can not active account');
+            }
+
+            if (Auth::attempt(['email' => $input['email'], 'password' =>  $input['password'], 'token_confirm' => null])) {
+                DB::commit();
+
+                return redirect()->intended(action($input['level'] == config('users.level.admin')
+                    ? 'Admin\BaseController@index'
+                    : 'User\ProductController@index'));
+            }
+
+            throw new Exception('Can not login after active account');
+        } catch(Exception $e) {
+            DB::rollback();
+            Log::error($e);
+
             return redirect()->action('User\ProductController@index');
         }
-
-        $user = $this->repository
-            ->where('email', $email)
-            // ->where('token_confirm', '<>', null)
-            ->get();
-
-        if (!$user || empty($user)) {
-            return false;
-        }
-
-        $this->repository->singleUpdate($user->first()->id, ['token_confirm' => null]);
-        $input = [
-            'email' => $user->first()->email,
-            'password' => $user->first()->password,
-        ];
-        
-        Auth::login($input);
-
-        return redirect()->intended(action($user->level == 1 ? 'Admin\BaseController@index' : 'User\ProductController@index'));
     }
 }

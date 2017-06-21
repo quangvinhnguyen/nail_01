@@ -19,22 +19,62 @@ Route::get('/contact', function() {
 
 Auth::routes();
 
-Route::post('/register', 'Auth\RegisterController@register');
-
-Route::post('/login', 'Auth\LoginController@login');
-
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
-    Route::get('/index', 'Admin\BaseController@index');
+Route::group(['namespace' => 'Auth'], function () {
+    Route::post('/register', 'RegisterController@register');
+    Route::post('/login', 'LoginController@login');
+    Route::get('/login', 'LoginController@getLogin');
 });
 
-Route::group(['prefix' => '/'], function () {
-    Route::get('/', 'User\BaseController@index');
+Route::group(['prefix' => '/admin', 'namespace' => 'Admin', 'middleware' => 'admin'], function () {
+    Route::get('/', 'BaseController@index');
+    Route::get('/dashboard', 'BaseController@index');
+    Route::resource('/services', 'ServicesController', [
+        'only' => [
+            'destroy',
+            'store',
+            'create',
+            'index',
+            'edit',
+            'update',
+        ],
+    ]);
+    Route::resource('/products', 'ProductsController',[
+        'only' => [
+            'destroy',
+            'store',
+            'create',
+            'index',
+            'edit',
+            'update',
+        ],
+    ]);
+    Route::resource('/combos', 'CombosController',[
+        'only' => [
+            'destroy',
+            'store',
+            'create',
+            'index',
+            'edit',
+            'update',
+        ],
+    ]);
+    Route::resource('/events', 'EventsController',[
+        'only' => [
+            'destroy',
+            'store',
+            'create',
+            'index',
+            'edit',
+            'update',
+        ],
+    ]);
+});
 
-    Route::get('/service', 'User\ProductController@index')->name('index');
-
-    Route::get('/active/{email}/{token}', 'User\UserController@active');
-
-    Route::get('/index', 'User\UserController@index');
+Route::group(['prefix' => '/', 'namespace' => 'User'], function () {
+    Route::get('/', 'BaseController@index');
+    Route::get('/service', 'ProductController@index')->name('index');
+    Route::get('/active/{email}/{token}', 'UserController@active');
+    Route::get('/index', 'UserController@index');
 });

@@ -14,14 +14,18 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         return User::class;
     }
 
-    public function create($data = [])
+    public function create($data)
     {
+        if (!$data) {
+            throw new Exception();
+        }
+
         $user = parent::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => $data['password'],
             'token_confirm' => $data['email'],
-            'level' => 1, // 0 is user 1 is admin => config later
+            'level' => config('users.level.admin'), // 0 is user 1 is admin => config later
         ]);
 
         if ($user) {
@@ -34,7 +38,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             $fields = [
                 'name' => $user->name,
                 'link' => action('User\UserController@active', [
-                    'email' => $user->email, 
+                    'email' => $user->email,
                     'token_confirm' => $user->token_confirm,
                 ]),
                 'content' => $user->name . ', Please confirm to active your account. Thank you so much!!!',
@@ -47,5 +51,36 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         }
 
         return true;
+    }
+
+    public function active($email, $token_confirm)
+    {
+        if (func_num_args() != 2) {
+            throw new Exception();
+        }
+
+        $user = $this->where([
+                'email' => $email,
+                'token_confirm' => $token_confirm,
+            ])
+            ->where('token_confirm', '<>', null)
+            ->where('pass_confirm', '<>', null)
+            ->get();
+
+        if (!$user) {
+            return false;
+        }
+
+        $password = $user->first()->pass_confirm;
+        $this->singleUpdate($user->first()->id, [
+            'token_confirm' => null,
+            'pass_confirm' => null,
+        ]);
+
+        return [
+            'email' => $user->first()->email,
+            'password' => $password,
+            'level' => $user->first()->level,
+        ];
     }
 }

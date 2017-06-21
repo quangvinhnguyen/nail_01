@@ -27,6 +27,14 @@ class AppServiceProvider extends ServiceProvider
             'App\Repositories\User\UserRepository',
             'App\Repositories\User\UserRepositoryInterface',
         ],
+        'event' => [
+            'App\Repositories\Combo\ComboRepository',
+            'App\Repositories\Combo\ComboRepositoryInterface',
+        ],
+        'combo' => [
+            'App\Repositories\Event\EventRepository',
+            'App\Repositories\Event\EventRepositoryInterface',
+        ],
      ];
 
     public function boot()
