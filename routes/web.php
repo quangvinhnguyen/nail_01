@@ -17,6 +17,7 @@ Route::get('/contact', function() {
     return view('users.pages.contact');
 });
 
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -79,4 +80,5 @@ Route::group(['prefix' => '/', 'namespace' => 'User'], function () {
     Route::get('/service', 'ProductController@index')->name('index');
     Route::get('/active/{email}/{token}', 'UserController@active');
     Route::get('/index', 'UserController@index');
+    Route::get('/about','EventController@about');
 });

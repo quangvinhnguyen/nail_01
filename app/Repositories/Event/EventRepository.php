@@ -54,4 +54,5 @@ class EventRepository extends BaseRepository implements EventRepositoryInterface
 
         return true;
     }
+
 }
