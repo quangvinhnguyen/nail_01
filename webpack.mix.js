@@ -2,7 +2,7 @@ const { mix } = require('laravel-mix');
 
 const THEME_PATH = 'resources/assets/user/';
 const USER_PATH = 'public/user/';
-const ADMIN_PATH = 'public/admin/';
+const ADMIN_PATH = 'public/admin_space/';
 const THEME_PATH_ADMIN = 'resources/assets/admin/'
 const NODE_PATH = 'node_modules/';
 
