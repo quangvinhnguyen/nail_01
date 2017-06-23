@@ -54,14 +54,18 @@ abstract class BaseRepository implements BaseRepositoryInterface
 
     public function paginate($limit = null, $columns = ['*'])
     {
-        $limit = is_null($limit) ? config('settings.paginate_limit') : $limit;
+        $paginate = $this->model->paginate($limit, $columns);
+        $this->makeModel();
 
-        return $this->model->paginate($limit, $columns);
+        return $paginate;
     }
 
     public function lists($column, $key = null)
     {
-        return $this->model->pluck($column, $key);
+        $lists = $this->model->pluck($column, $key);
+        $this->makeModel();
+
+        return $lists;
     }
 
     public function where($conditions, $operator = null, $value = null)
@@ -85,8 +89,8 @@ abstract class BaseRepository implements BaseRepositoryInterface
 
     public function orWhereIn($conditions, $value = null)
     {
-        $this->orWhereIn[] = [$conditions, $operator, $value];
-        $this->model = $this->model->orWhereIn($conditions, $value);
+        $this->orWhereIn[] = [$conditions, $value];
+        $this->model = $this->model->orWhereIn($this->orWhereIn);
 
         return $this;
     }
@@ -148,11 +152,32 @@ abstract class BaseRepository implements BaseRepositoryInterface
 
     public function getModel()
     {
-        return $this->makeModel();;
+        return $this->makeModel();
     }
 
-    public function get()
+    public function get($column = ['*'])
     {
-        return $this->model->get();
+        $model = $this->model->get($column);
+        $this->makeModel();
+
+        return $model;
+    }
+
+    public function uploadImage($files, $path)
+    {
+        if (!$files) {
+            return null;
+        }
+
+        $files = is_array($file) ? $files : [$files];
+        $names = [];
+
+        foreach ($files as $file) {
+            $fileName = uniqid(rand(), true) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path($path), $fileName);
+            $names[] = $fileName;
+        }
+
+        return $names;
     }
 }

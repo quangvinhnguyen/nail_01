@@ -43,4 +43,9 @@ class Combo extends Model
     {
         return $this->belongsToMany(Event::class);
     }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class);
+    }
 }

@@ -13,9 +13,6 @@ class BaseController extends AbstractController
     */
     public function index()
     {
-        // exemple 
-        echo('admin page');
-        die();
-        # code 
+        return view('admin.index');
     }
 }

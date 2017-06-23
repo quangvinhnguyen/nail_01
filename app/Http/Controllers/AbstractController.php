@@ -51,7 +51,7 @@ abstract class AbstractController extends Controller
         $this->view = $view;
 
         if (func_num_args() == 1 && is_string($view)) {
-            return View::make($this->viewPrefix . '.' . $this->view);
+            return view($this->viewPrefix . '.' . $this->view);
         } elseif (!is_string($view)) {
             throw new Exception('Invalit path to view');
         }
