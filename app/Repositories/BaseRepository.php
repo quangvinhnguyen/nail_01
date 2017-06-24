@@ -169,7 +169,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
             return null;
         }
 
-        $files = is_array($file) ? $files : [$files];
+        $files = is_array($files) ? $files : [$files];
         $names = [];
 
         foreach ($files as $file) {
