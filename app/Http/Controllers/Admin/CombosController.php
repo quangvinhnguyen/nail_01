@@ -21,7 +21,7 @@ class CombosController extends BaseController
      */
     public function index()
     {
-        return $this->viewRender('combos.index', $this->repository->all());
+        return $this->viewRender('combos.index',$this->compacts['data']= $this->repository->all());
     }
 
     /**

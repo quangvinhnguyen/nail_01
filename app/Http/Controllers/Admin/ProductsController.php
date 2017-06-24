@@ -124,8 +124,12 @@ class ProductsController extends BaseController
         return redirect()->action('Admin\ProductsController@index');
     }
 
-    public function getProductByCategory($serviceId)
+    public function getProductByCategory(Request $request, $serviceId)
     {
+        if (!$request->ajax()) {
+            return response()->json(['products' => null]);
+        }
+
         if (!is_numeric($serviceId)) {
             return response()->json(['products' => null]);
         }

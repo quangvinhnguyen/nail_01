@@ -108,7 +108,11 @@
         {!! Html::script('admin_space/vendors/jszip/dist/jszip.min.js') !!}
         {!! Html::script('admin_space/vendors/pdfmake/build/pdfmake.min.js') !!}
         {!! Html::script('admin_space/vendors/pdfmake/build/vfs_fonts.js') !!}
+          <!-- validator -->
+        {{-- <script src="../vendors/validator/validator.js"></script> --}}
+        {!! Html::script('admin_space/vendors/validator/validator.js') !!}
         <!-- Custom Theme Scripts -->
         {!! Html::script('admin_space/js/custom.min.js') !!}
+        {!! Html::script('admin_space/resources/assets/admin/js/combo.js') !!}
     </body>
 </html>

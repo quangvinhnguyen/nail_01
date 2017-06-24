@@ -121,6 +121,38 @@
                                             {{ Form::file('images[]', ['multiple ' => true]) }}
                                         </div>
                                     </div>
+                                    <div class="item form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">
+                                            Choose products
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <select name="service_id" id="service_id" class="form-control">
+                                                @foreach ($items as $item)
+                                                    <option value="{{ action('Admin\ProductsController@getProductByCategory', ['id' => $item->id]) }}">{{ $item->title }}</option>
+                                                @endforeach
+                                            </select>
+                                            <br/>
+                                        <div class="col-md-12">
+                                            <div class="col-md-6">
+                                                <table  class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                                                 <thead>
+                                                    <tr>
+                                                        <th> name </th>
+                                                        <th>  action </th>
+                                                    </tr>
+                                                 </thead>
+                                                 <tbody id="listchooseproduct">
+
+                                                 </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-md-6" id='listProducts'></div>
+                                        </div>
+                                    </div>
+                                        </div>
+
+
                                     <div class="form-group">
                                         <div class="col-md-6 col-md-offset-3">
                                             <a href="{{ action('Admin\CombosController@index') }}" class="btn btn-primary">Cancel </a>

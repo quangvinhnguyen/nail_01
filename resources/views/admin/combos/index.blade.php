@@ -26,7 +26,7 @@
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2>List Products</h2>
+                            <h2>List Combos</h2>
                             <ul class="nav navbar-right panel_toolbox">
                                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                                 <li class="dropdown">
@@ -49,15 +49,14 @@
                                 <thead>
                                     <tr>
                                         <th>Title</th>
-                                        <th>Description </th>
                                         <th>Status</th>
                                         <th>Price</th>
                                         <th>Sale</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($items as $item)
-                                        {{-- @foreach ($item->products as $p)
+                                        @foreach ($data as $p)
                                             <tr>
                                                 <td>
                                                     <a href="#{{ $p->id }}">
@@ -80,7 +79,6 @@
                                                     {!! Form::close() !!}
                                                 </td>
                                             </tr>
-                                        @endforeach --}}
                                     @endforeach
                                 </tbody>
                             </table>
