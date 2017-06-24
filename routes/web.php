@@ -70,6 +70,8 @@ Route::group(['prefix' => '/admin', 'namespace' => 'Admin', 'middleware' => 'adm
             'update',
         ],
     ]);
+
+    Route::get('/view-render-combo-product/{id}', 'ProductsController@getProductByCategory');
 });
 
 Route::group(['prefix' => '/', 'namespace' => 'User'], function () {

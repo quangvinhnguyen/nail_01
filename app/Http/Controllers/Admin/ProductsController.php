@@ -123,4 +123,18 @@ class ProductsController extends BaseController
 
         return redirect()->action('Admin\ProductsController@index');
     }
+
+    public function getProductByCategory($serviceId)
+    {
+        if (!is_numeric($serviceId)) {
+            return response()->json(['products' => null]);
+        }
+
+        $products = $this->repository->where('service_id', $serviceId)->get(['id', 'name']);
+        $view = view('admin.component.product_combo', compact('products'))->render();
+
+        return response()->json([
+            'view' => $view,
+        ]);
+    }
 }

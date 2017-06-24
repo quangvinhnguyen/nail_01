@@ -25,10 +25,16 @@
                         <div class="span9" id="divMain">
                             </br>
                             <a>
-                                <img src="images/circle.jpg" class="img-circle pull-left" style="margin:5px 15px 10px;" alt="" />
+                                {{ Html::image(config('settings.url_upload_img') . $product->images->first()->url, '', [
+                                    'class' => 'img-circle pull-left',
+                                    'style' => 'margin:5px 15px 10px; max-width: 15%;'
+                                ]) }}
                             </a>
                            <h3> {{ $product->name }}</h3>
                             <a class="price dt-sc-button small">  </a>
+                            <div>
+                                {{ $product->description() }}
+                            </div>
                             <button type="button" class="btn btn-primary">${{ $product->price }}</button>
                         </div>
                     @endforeach

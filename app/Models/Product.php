@@ -48,4 +48,13 @@ class Product extends Model
 
         return $this->attributes['name'];
     }
+
+    public function description($option = false)
+    {
+        if ($option) {
+            return str_limit($this->attributes['description'], config('settings.length_title_default'));
+        }
+
+        return $this->attributes['description'];
+    }
 }
