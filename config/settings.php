@@ -17,4 +17,5 @@ return [
     ],
     'url_comon_img' => '/admin_space/images/',
     'url_upload_img' => '/upload/images/',
+    'image_product_default' => '/admin_space/images/cropper.jpg',
 ];

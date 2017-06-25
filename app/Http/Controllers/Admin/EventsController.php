@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Repositories\Event\EventRepositoryInterface;
 use DB;
 use Exception;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class EventsController extends BaseController
 {
@@ -58,6 +58,7 @@ class EventsController extends BaseController
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
+            Log::error($e);
 
             return redirect()->action('Admin\EventsController@index')
                 ->with('message-fail', 'Some thing went wrong when create event, please try again');
@@ -120,6 +121,7 @@ class EventsController extends BaseController
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
+            Log::error($e);
 
             return redirect()->action('Admin\EventsController@index')
                 ->with('message-fail', 'Some thing went wrong when delete event, please try again');

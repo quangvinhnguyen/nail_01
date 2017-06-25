@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Repositories\Combo\ComboRepositoryInterface;
 use DB;
 use Exception;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class CombosController extends BaseController
 {
@@ -21,7 +21,9 @@ class CombosController extends BaseController
      */
     public function index()
     {
-        return $this->viewRender('combos.index', $this->repository->all());
+        $this->compacts['data'] = $this->repository->all();
+
+        return $this->viewRender('combos.index');
     }
 
     /**
@@ -59,6 +61,7 @@ class CombosController extends BaseController
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
+            Log::error($e);
 
             return redirect()->action('Admin\CombosController@index')
                 ->with('messages-fail', 'Some thing went wrong when create combo, please try again');
@@ -87,7 +90,15 @@ class CombosController extends BaseController
      */
     public function edit($id)
     {
-        //
+        $combo = $this->repository->find($id);
+
+        if (!$combo) {
+            return redirect()->action('Admin\CombosController@index');
+        }
+
+        $this->compacts['combo'] = $combo;
+
+        return $this->viewRender('combos.update');
     }
 
     /**
@@ -99,7 +110,21 @@ class CombosController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+
+        DB::beginTransaction();
+        try {
+            $this->repository->update($data);
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return redirect()->action('Admin\CombosController@index')
+                ->with('message-fail', 'Some thing went wrong when update combo, please try again');
+        }
+
+        return redirect()->action('Admin\CombosController@index')
+            ->with('message-success', 'Update successfully');
     }
 
     /**

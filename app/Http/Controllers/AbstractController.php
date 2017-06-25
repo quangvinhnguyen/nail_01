@@ -18,7 +18,7 @@ abstract class AbstractController extends Controller
 
     protected $view;
 
-    // protected $pagiante; update later
+    protected $paginate;
 
     protected $viewPrefix;
 
@@ -59,10 +59,5 @@ abstract class AbstractController extends Controller
         $parma = array_merge($this->compacts, is_array($compact) ? $compact : [$compact]);
 
         return view($this->viewPrefix . '.' . $this->view, $parma);
-    }
-
-    public function activityLog($actions, $message = null)
-    {
-        Activity::log( $message ?: $this->repositoryName . ':' . $actions );
     }
 }

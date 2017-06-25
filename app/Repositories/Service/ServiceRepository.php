@@ -5,7 +5,6 @@ namespace App\Repositories\Service;
 use App\Repositories\BaseRepository;
 use App\Models\Service;
 use Carbon\Carbon;
-use Log;
 use Exception;
 
 class ServiceRepository extends BaseRepository implements ServiceRepositoryInterface
@@ -23,38 +22,21 @@ class ServiceRepository extends BaseRepository implements ServiceRepositoryInter
     public function create($data)
     {
         if (empty($data)) {
-            throw new Exception();
+            throw new Exception('Not found id');
         }
 
-        try {
-            $service = parent::create($data);
-        } catch (Exception $e) {
-            Log::error($e);
-
-            throw new Exception($e);
-        }
+        $service = parent::create($data);
 
         return $service;
-    }
-
-    public function find($id)
-    {
-       return parent::find($id);
     }
 
     public function update($id, $data)
     {
         if (empty($id) || empty($data)) {
-            throw new Exception();
+            throw new Exception('Not found id or empty data input');
         }
 
-        try {
-            $service = parent::singleUpdate($id, $data);
-        } catch (Exception $e) {
-            Log::error($e);
-
-            throw new Exception($e);
-        }
+        $service = parent::singleUpdate($id, $data);
 
         return $service;
     }
@@ -62,16 +44,21 @@ class ServiceRepository extends BaseRepository implements ServiceRepositoryInter
     public function delete($id)
     {
         if (!$id) {
-            throw new Exception();
+            throw new Exception('Not found id');
         }
 
-        try {
-            $service = parent::delete($id);
-        } catch (Exception $e) {
-            Log::error($e);
+        $service = $this->find($id);
 
-            throw new Exception($e);
+        if (!$service) {
+            throw new Exception('Not found service');
         }
+
+        foreach ($service->products as $product) {
+            $product->events()->delete();
+        }
+
+        $service->products()->delete();
+        $service = parent::delete($id);
 
         return $service;
     }
