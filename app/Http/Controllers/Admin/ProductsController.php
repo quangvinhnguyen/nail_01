@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Repositories\Product\ProductRepositoryInterface;
 use DB;
 use Exception;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class ProductsController extends BaseController
 {
@@ -58,7 +58,7 @@ class ProductsController extends BaseController
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
-            Log::errors($e);
+            Log::error($e);
 
             return redirect()->action('Admin\ProductsController@index')
                 ->with(['messages-fail' => 'Error when create product']);
@@ -98,17 +98,29 @@ class ProductsController extends BaseController
      */
     public function update(Request $request, $id)
     {
-       $data = $request->only(
+        $data = $request->only(
             'name',
             'price',
             'status',
             'service_id',
-            'description'
-       );
+            'description',
+            'images'
+        );
 
-       $service = $this->repository->update($id,$data);
+        DB::beginTransaction();
+        try {
+            $this->repository->update($id, $data);
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            Log::error($e);
 
-       return redirect()->action('Admin\ProductsController@index');
+            return redirect()->action('Admin\ProductsController@index')
+                ->with('messages-fail', 'Something went wrong when update product, please try again.');
+        }
+
+       return redirect()->action('Admin\ProductsController@index')
+        ->with('message', 'Update successfully');
     }
 
     /**
@@ -124,16 +136,17 @@ class ProductsController extends BaseController
         return redirect()->action('Admin\ProductsController@index');
     }
 
-    public function getProductByCategory($serviceId)
+    public function getProductByCategory(Request $request, $serviceId)
     {
-        if (!is_numeric($serviceId)) {
-            return response()->json(['products' => null]);
+        if (!$request->ajax() || !is_numeric($serviceId)) {
+            return response()->json(['status' => false]);
         }
 
-        $products = $this->repository->where('service_id', $serviceId)->get(['id', 'name']);
+        $products = $this->repository->where('service_id', $serviceId)->paginate(config('settings.paginate_limit'), ['name', 'id']);
         $view = view('admin.component.product_combo', compact('products'))->render();
 
         return response()->json([
+            'status' => true,
             'view' => $view,
         ]);
     }

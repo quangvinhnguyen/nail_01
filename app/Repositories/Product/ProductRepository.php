@@ -5,7 +5,6 @@ namespace App\Repositories\Product;
 use App\Models\Product;
 use App\Repositories\BaseRepository;
 use Exception;
-use Log;
 
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface
 {
@@ -45,34 +44,22 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function update($id, $data)
     {
         if (!$id && !$data) {
-            throw new Exception();
+            throw new Exception('Not found id or empty data input');
         }
 
-        try {
-            $service = $this->singleUpdate($id, $data);
-        } catch (Exception $e) {
-            Log::errors();
+        $product = $this->singleUpdate($id, $data);
 
-            throw new Exception($e);
-        }
-
-        return $service;
+        return $product;
     }
 
     public function delete($id)
     {
         if (!$id) {
-            throw new Exception();
+            throw new Exception('Not found id');
         }
 
-        try {
-            $service = parent::delete($id);
-        } catch (Exception $e) {
-            Log::errors();
+        $product = parent::delete($id);
 
-            throw new Exception($e);
-        }
-
-        return $service;
+        return $product;
     }
 }

@@ -23,7 +23,7 @@
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2>Add new combo</h2>
+                                <h2>Update combo</h2>
                                 <ul class="nav navbar-right panel_toolbox">
                                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                                     <li class="dropdown">
@@ -46,13 +46,14 @@
                                 {{ Form::open([
                                     'class' => 'form-horizontal form-label-left',
                                     'novalidate' => true,
-                                    'action' => 'Admin\CombosController@store',
+                                    'action' => ['Admin\CombosController@update', $combo->id],
+                                    'method' => 'PUT',
                                 ]) }}
                                     <div class="item form-group">
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Title <span class="required">*</span>
                                         </label>
                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                            {{ Form::text('title', null, [
+                                            {{ Form::text('title', $combo->title, [
                                                 'class' => 'form-control col-md-7 col-xs-12',
                                                 'data-validate-length-range' => '6',
                                                 'name' => 'title',
@@ -65,7 +66,7 @@
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Description<span class="required">*</span>
                                         </label>
                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                            {{ Form::text('description', null, [
+                                            {{ Form::text('description', $combo->description, [
                                                 'class' => 'form-control col-md-7 col-xs-12',
                                                 'data-validate-length-range' => '6',
                                                 'name' => 'description',
@@ -78,7 +79,7 @@
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Status<span class="required">*</span>
                                         </label>
                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                            {{ Form::select('status', config('settings.status_show'), config('settings.status.active'), [
+                                            {{ Form::select('status', config('settings.status_show'), $combo->status, [
                                                 'class' => 'form-control col-md-7 col-xs-12',
                                                 'name' => 'status',
                                                 'required' => 'required',
@@ -91,7 +92,7 @@
                                             <span class="required">*</span>
                                         </label>
                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                            {{ Form::number('price', null, [
+                                            {{ Form::number('price', $combo->price, [
                                                 'class' => 'form-control col-md-7 col-xs-12',
                                                 'name' => 'price',
                                                 'placeholder' => '$0.00',
@@ -105,7 +106,7 @@
                                             <span class="required">*</span>
                                         </label>
                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                            {{ Form::number('sale', null, [
+                                            {{ Form::number('sale', $combo->sale, [
                                                 'class' => 'form-control col-md-7 col-xs-12',
                                                 'name' => 'sale',
                                                 'placeholder' => '0.0%',
@@ -122,8 +123,19 @@
                                         </div>
                                     </div>
                                     <div class="item form-group">
+                                        @forelse ($combo->images as $imgae)
+                                            {{ Html::image(config('settings.url_upload_img') . $image->url, 'images' . $image->id, [
+                                                'class' => 'img-responsive',
+                                            ]) }}
+                                        @empty
+                                            {{ Html::image(config('settings.image_product_default'), 'images', [
+                                                'class' => 'img-responsive',
+                                            ]) }}
+                                        @endforelse
+                                    </div>
+                                    <div class="item form-group">
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">
-                                            Choose products
+                                            Products
                                             <span class="required">*</span>
                                         </label>
                                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -143,7 +155,18 @@
                                                                 <th>Action</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody id="listchooseproduct">
+                                                        <tbody id="listchooseproduct" data-ids="{{ json_encode($combo->products->pluck('id')) }}">
+                                                            @foreach ($combo->products as $product)
+                                                                <tr id="{{ $product->id }}">
+                                                                    <td align='center'>{{ $product->name }}</td>
+                                                                    <td align='center'>
+                                                                        {{ Form::button('', [
+                                                                            'class' => 'btn-remove btn-danger fa fa-close',
+                                                                        ]) }}
+                                                                    </td>
+                                                                    <input type='hidden' name='productIds[]' value="{{ $product->id }}">
+                                                                </tr>
+                                                            @endforeach
                                                         </tbody>
                                                     </table>
                                                 </div>

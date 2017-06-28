@@ -26,7 +26,7 @@
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2>List Products</h2>
+                            <h2>List Combos</h2>
                             <ul class="nav navbar-right panel_toolbox">
                                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                                 <li class="dropdown">
@@ -53,34 +53,34 @@
                                         <th>Status</th>
                                         <th>Price</th>
                                         <th>Sale</th>
+                                        <th>Option</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($items as $item)
-                                        {{-- @foreach ($item->products as $p)
-                                            <tr>
-                                                <td>
-                                                    <a href="#{{ $p->id }}">
-                                                        {{ $p->name }}
-                                                    </a>
-                                                </td>
-                                                <td>{{ $p->price }}</td>
-                                                <td>{{ $p->status }}</td>
-                                                <td>{{ $p->sale ? 'Is Sale' : 'N/A' }}</td>
-                                                <td>
-                                                    <a href="{{ action('Admin\CombosController@edit', $p->id) }}" class="btn btn-info btn-xs">
-                                                        <i class="fa fa-pencil"></i>
-                                                        Edit
-                                                    </a>
-                                                    {!! Form::open([
-                                                        'method' => 'DELETE',
-                                                        'action' => ['Admin\CombosController@destroy', $p->id],
-                                                    ]) !!}
-                                                        {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs fa fa-pencil ']) !!}
-                                                    {!! Form::close() !!}
-                                                </td>
-                                            </tr>
-                                        @endforeach --}}
+                                    @foreach ($data as $combo)
+                                        <tr>
+                                            <td>
+                                                <a href="#{{ $combo->id }}">
+                                                    {{ $combo->title }}
+                                                </a>
+                                            </td>
+                                            <td>{{ $combo->description }}</td>
+                                            <td>{{ $combo->status }}</td>
+                                            <td>{{ $combo->price }}</td>
+                                            <td>{{ $combo->sale }}</td>
+                                            <td>
+                                                <a href="{{ action('Admin\CombosController@edit', $combo->id) }}" class="btn btn-info btn-xs">
+                                                    <i class="fa fa-pencil"></i>
+                                                    Edit
+                                                </a>
+                                                {!! Form::open([
+                                                    'method' => 'DELETE',
+                                                    'action' => ['Admin\CombosController@destroy', $combo->id],
+                                                ]) !!}
+                                                    {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs fa fa-pencil ']) !!}
+                                                {!! Form::close() !!}
+                                            </td>
+                                        </tr>
                                     @endforeach
                                 </tbody>
                             </table>

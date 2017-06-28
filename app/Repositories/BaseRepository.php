@@ -165,7 +165,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
 
     public function uploadImage($files, $path)
     {
-        if (!$files) {
+        if (!$files || !head($files)) {
             return null;
         }
 
