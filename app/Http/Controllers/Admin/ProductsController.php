@@ -104,7 +104,8 @@ class ProductsController extends BaseController
             'status',
             'service_id',
             'description',
-            'images'
+            'nameImgs',
+            'imageDeleteIds'
         );
 
         DB::beginTransaction();

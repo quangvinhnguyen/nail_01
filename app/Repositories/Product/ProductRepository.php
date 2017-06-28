@@ -26,17 +26,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $data['nameImgs'] = $this->uploadImage($data['nameImgs'], config('settings.url_upload_img'));
         $inputs = array_except($data, ['nameImgs']);
         $product = parent::create($inputs);
-        $imgs = [];
-
-        if (!empty($data['nameImgs'])) {
-            foreach ($data['nameImgs'] as $img) {
-                $imgs[] = [
-                    'url' => $img,
-                ];
-            }
-
-            $product->images()->createMany($imgs);
-        }
+        $product->images()->createMany($this->getUrlImages($data['nameImgs']));
 
         return $product;
     }
@@ -47,7 +37,24 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             throw new Exception('Not found id or empty data input');
         }
 
-        $product = $this->singleUpdate($id, $data);
+        $product = $this->singleUpdate($id, array_except($data, ['imageDeleteIds', 'images']));
+        $imageDeleteIds = [];
+
+        if (!empty($data['imageDeleteIds'])) {
+            $imageDeleteIds = explode(',', $data['imageDeleteIds']);
+
+            foreach ($product->images()->whereIn('id', $imageDeleteIds)->get(['url']) as $image) {
+                $file_path = str_replace('app', 'public', app_path() . config('settings.url_remove_img')) . $image->url;
+                unlink($file_path);
+            }
+
+            $product->images()->whereIn('id', $imageDeleteIds)->delete();
+        }
+
+        if (!empty($data['nameImgs'])) {
+            $upload = $this->uploadImage($data['nameImgs'], config('settings.url_upload_img'));
+            $product->images()->createMany($this->getUrlImages($upload));
+        }
 
         return $product;
     }
@@ -61,5 +68,22 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $product = parent::delete($id);
 
         return $product;
+    }
+
+    private function getUrlImages($upload)
+    {
+        if (!empty($upload) || !is_array($upload)) {
+            return [];
+        }
+
+        $imgs = [];
+
+        foreach ($upload as $img) {
+            $imgs[] = [
+                'url' => $img,
+            ];
+        }
+
+        return $imgs;
     }
 }

@@ -34,6 +34,11 @@
         <!-- Custom Theme Style -->
         {{-- <link href="../build/css/custom.min.css" rel="stylesheet"> --}}
         {!! Html::style('admin_space/css/custom.min.css') !!}
+        {{-- <link href="../css/fileinput.css" media="all" rel="stylesheet" type="text/css"/> --}}
+        {!! Html::style('admin_space/css/fileinput.css') !!}
+        {!! Html::style('admin_space/css/upload.css') !!}
+        {{-- <link href="../themes/explorer/theme.css" media="all" rel="stylesheet" type="text/css"/> --}}
+        {!! Html::style('admin_space/explorer/theme.css') !!}
     </head>
 
     <body class="nav-md">
@@ -112,6 +117,19 @@
         {!! Html::script('admin_space/vendors/validator/validator.js') !!}
         <!-- Custom Theme Scripts -->
         {!! Html::script('admin_space/js/custom.min.js') !!}
+
         {!! Html::script('admin_space/resources/assets/admin/js/combo.js') !!}
+
+        {{-- <script src="../js/plugins/sortable.js" type="text/javascript"></script> --}}
+        {!! Html::script('admin_space/js/plugins/sortable.js') !!}
+        {{-- <script src="../js/fileinput.js" type="text/javascript"></script> --}}
+        {!! Html::script('admin_space/js/fileinput.js') !!}
+        {{-- <script src="../js/locales/fr.js" type="text/javascript"></script> --}}
+        {!! Html::script('admin_space/js/locales/fr.js') !!}
+        {{-- <script src="../js/locales/es.js" type="text/javascript"></script> --}}
+        {!! Html::script('admin_space/js/locales/es.js') !!}
+        {{-- <script src="../themes/explorer/theme.js" type="text/javascript"></script> --}}
+        {!! Html::script('admin_space/explorer/theme.js') !!}
+        {!! Html::script('admin_space/js/upload.js') !!}
     </body>
 </html>

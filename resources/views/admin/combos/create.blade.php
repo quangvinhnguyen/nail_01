@@ -119,7 +119,11 @@
                                             <span class="required">*</span>
                                         </label>
                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                            {{ Form::file('images[]', ['multiple ' => true]) }}
+                                            {{ Form::file('images[]', [
+                                                'id' => 'kv-explorer',
+                                                'multiple ' => true,
+
+                                            ]) }}
                                         </div>
                                     </div>
                                     <div class="item form-group">

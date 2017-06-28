@@ -33,6 +33,8 @@ $('body').on('click', '.btn-add', function() {
         }
     }
 
+console.log(items)
+console.log(flag)
     if (flag) {
         $('#listchooseproduct').append(head + item.name + middle + item.id + end);
         items.push(item.id); // them vào mang item

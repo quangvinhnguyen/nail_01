@@ -43,6 +43,7 @@
                                 'novalidate' => true,
                                 'action' => ['Admin\ProductsController@update', $src->id],
                                 'method' => 'put',
+                                'enctype' => 'multipart/form-data',
                             ]) }}
                                 <div class="item form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">
@@ -115,7 +116,30 @@
                                         Images
                                         <span class="required">*</span>
                                     </label>
-                                    {{ Form::file('nameImgs[]', ['multiple ' => true]) }}
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        @php
+                                            $images = $src->images;
+                                            $url = [];
+                                            $name = [];
+                                            $ids = [];
+
+                                            foreach ($images as $image) {
+                                                $ids[] = $image->id;
+                                                $name[] = $image->url;
+                                                $url[] = config('settings.url_upload_img') . $image->url;
+                                            }
+                                        @endphp
+                                        {{ Form::file('nameImgs[]',[
+                                            'id' => 'kv-explorer',
+                                            'multiple ' => true,
+                                            'data' => json_encode($url),
+                                            'data-name' => json_encode($name),
+                                            'data-ids' => json_encode($ids),
+                                        ]) }}
+                                        {{ Form::text('imageDeleteIds', '', [
+                                            'id' => 'imageDeleteIds',
+                                        ]) }}
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-6 col-md-offset-3">

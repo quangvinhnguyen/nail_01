@@ -66,7 +66,7 @@
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Description<span class="required">*</span>
                                         </label>
                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                            {{ Form::text('description', $combo->description, [
+                                            {{ Form::textarea('description', $combo->description, [
                                                 'class' => 'form-control col-md-7 col-xs-12',
                                                 'data-validate-length-range' => '6',
                                                 'name' => 'description',
@@ -119,19 +119,26 @@
                                             <span class="required">*</span>
                                         </label>
                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                            {{ Form::file('images[]', ['multiple ' => true]) }}
-                                        </div>
+                                        @php
+                                            $images = $combo->images;
+                                            $url =[];
+                                            $name = [];
+                                            $ids = [];
+
+                                            foreach ($images as $image) {
+                                                $name[] = $image->url;
+                                                $ids[] = $image->id;
+                                                $url[] = config('settings.url_upload_img') . $image->url;
+                                            }
+                                        @endphp
+                                        {{ Form::file('nameImgs[]',[
+                                            'id' => 'kv-explorer',
+                                            'multiple ' => true,
+                                            'data' => json_encode($url),
+                                            'data-name' => json_encode($name),
+                                            'data-ids' => json_encode($ids),
+                                        ]) }}
                                     </div>
-                                    <div class="item form-group">
-                                        @forelse ($combo->images as $image)
-                                            {{ Html::image(config('settings.url_upload_img') . $image->url, 'images' . $image->id, [
-                                                'class' => 'img-responsive',
-                                            ]) }}
-                                        @empty
-                                            {{ Html::image(config('settings.image_product_default'), 'images', [
-                                                'class' => 'img-responsive',
-                                            ]) }}
-                                        @endforelse
                                     </div>
                                     <div class="item form-group">
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">

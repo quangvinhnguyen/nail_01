@@ -116,7 +116,13 @@
                                         Images
                                         <span class="required">*</span>
                                     </label>
-                                    {{ Form::file('nameImgs[]', ['multiple ' => true]) }}
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {{ Form::file('nameImgs[]', [
+                                        'id' => 'kv-explorer',
+                                        'type' => 'file',
+                                        'multiple ' => true,
+                                    ]) }}
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-6 col-md-offset-3">
@@ -133,3 +139,4 @@
     </div>
 <!-- /page content -->
 @endsection
+
