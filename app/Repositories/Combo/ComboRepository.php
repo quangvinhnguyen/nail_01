@@ -68,8 +68,11 @@ class ComboRepository extends BaseRepository implements ComboRepositoryInterface
         $combo = $this->findOrFail($id);
 
         if (!empty($data['images'])) {
-            $images = $this->uploadImage($data['images']);
-            $combo->images()->createMany($images);
+            $images = $this->uploadImage($data['images'], config('settings.url_upload_img'));
+
+            if ($images) {
+                $combo->images()->createMany($images);
+            }
         }
 
         if (!empty($data['deleteImgIds'])) {

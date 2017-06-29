@@ -114,11 +114,11 @@ class CombosController extends BaseController
 
         DB::beginTransaction();
         try {
-            $this->repository->update($data);
+            $this->repository->update($id, array_except($data, ['_method', '_token']));
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
-
+            dd($e);
             return redirect()->action('Admin\CombosController@index')
                 ->with('message-fail', 'Some thing went wrong when update combo, please try again');
         }
