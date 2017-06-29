@@ -123,7 +123,7 @@
                                         </div>
                                     </div>
                                     <div class="item form-group">
-                                        @forelse ($combo->images as $imgae)
+                                        @forelse ($combo->images as $image)
                                             {{ Html::image(config('settings.url_upload_img') . $image->url, 'images' . $image->id, [
                                                 'class' => 'img-responsive',
                                             ]) }}
