@@ -14,6 +14,8 @@ interface BaseRepositoryInterface
 
     public function find($id);
 
+    public function findOrFail($id);
+
     public function paginate($limit = null, $columns = ['*']);
 
     public function lists($column, $key = null);
